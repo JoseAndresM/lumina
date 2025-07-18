@@ -254,7 +254,7 @@
         
         .mistake-solution { margin-top: 1.5rem; }
         .mistake-solution h4 { color: var(--danger-color); }
-        .mistake-solution p { color: var(--success-color); }
+        .mistake-solution p { color: var(--success-color); font-weight: 600; }
 
         .tabs { display: flex; flex-wrap: wrap; gap: 1rem; border-bottom: 2px solid var(--border-color); margin-bottom: 1.5rem; }
         .tab { padding: 0.75rem 1.25rem; background: none; border: none; color: var(--text-light); font-weight: 600; cursor: pointer; position: relative; border-radius: 8px 8px 0 0; transition: all 0.2s ease; }
@@ -300,7 +300,7 @@
         <!-- Creative Team Section -->
         <section id="creative-section" class="team-section">
             <nav class="sub-nav">
-                <a href="#" id="home-btn" onclick="showLobby(event)">🏠 Home</a>
+                <a href="#" class="home-btn" onclick="showLobby(event)">🏠 Home</a>
                 <a href="#creative-what-is">What is Lumina?</a>
                 <a href="#creative-journey">Creative's Journey</a>
                 <a href="#creative-bubble-chart">Bubble Chart</a>
@@ -420,7 +420,7 @@
         <!-- Growth Team Section -->
         <section id="growth-section" class="team-section">
             <nav class="sub-nav">
-                <a href="#" onclick="showLobby(event)">🏠 Home</a>
+                <a href="#" class="home-btn" onclick="showLobby(event)">🏠 Home</a>
                 <a href="#growth-overview">Overview</a>
                 <a href="#growth-workflow">Workflow</a>
                 <a href="#growth-bubble-chart">Bubble Chart</a>
@@ -554,10 +554,9 @@
         <!-- Collaboration Section -->
         <section id="collab-section" class="team-section">
             <nav class="sub-nav">
-                <a href="#" onclick="showLobby(event)">🏠 Home</a>
+                <a href="#" class="home-btn" onclick="showLobby(event)">🏠 Home</a>
                 <a href="#collab-trust">Building Trust</a>
                 <a href="#collab-winning">Winning Together</a>
-                <a href="#collab-power-moves">Power Moves</a>
                 <a href="#collab-templates">Templates</a>
             </nav>
 
@@ -596,16 +595,28 @@
                     <h4>Collaborative Action Planning</h4>
                     <p>Turn insights into next week's strategy:</p>
                     <div class="quadrant-guide">
+                        <div class="quadrant top-left">
+                            <h4>💎 Hidden Gems (Top Left)</h4>
+                            <p><strong>Creative:</strong> Identify message-audience mismatch.</p>
+                            <p><strong>Growth:</strong> Structure tests for this type of creatives.</p>
+                            <p><strong>Together:</strong> Merge with high-ROAS creative elements.</p>
+                        </div>
                         <div class="quadrant top-right">
                             <h4>✅ Stars (Top Right)</h4>
                             <p><strong>Creative:</strong> Share 3 key elements that make this work.</p>
                             <p><strong>Growth:</strong> Identify best placements/audiences.</p>
                             <p><strong>Together:</strong> Plan 2-3 variations maintaining core elements.</p>
                         </div>
+                        <div class="quadrant bottom-left">
+                            <h4>❌ Rethink Zone (Bottom Left)</h4>
+                            <p><strong>Creative:</strong> Identify message angles and patterns that did not work.</p>
+                            <p><strong>Growth:</strong> Identify where these creatives are live and evaluate the risk of pausing them.</p>
+                            <p><strong>Together:</strong> Rethink the creative angle of these.</p>
+                        </div>
                         <div class="quadrant bottom-right">
-                             <h4>🔧 High-Potential (Bottom Right)</h4>
+                             <h4>🔧 Hook Masters (Bottom Right)</h4>
                             <p><strong>Creative:</strong> Identify message-audience mismatch.</p>
-                            <p><strong>Growth:</strong> Test with value-optimized campaigns.</p>
+                            <p><strong>Growth:</strong> Rationalize test for this concepts.</p>
                             <p><strong>Together:</strong> Merge with high-ROAS creative elements.</p>
                         </div>
                     </div>
@@ -690,7 +701,7 @@
             function playClickSound() {
                 if (clickSound) {
                     clickSound.currentTime = 0;
-                    clickSound.play().catch(e => console.error("Sound playback failed:", e));
+                    clickSound.play().catch(e => { /* Ignore errors if user hasn't interacted yet */ });
                 }
             }
             
