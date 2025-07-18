@@ -1,443 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumina Score Playbook Mejorado</title>
-
-    <!-- Google Fonts para una tipografía más elegante -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <!-- Librería de animaciones AOS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-    <style>
-        /* --- Reset y Configuración Base --- */
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --text-color: #374151;
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --border-radius-md: 12px;
-            --border-radius-lg: 16px;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.7;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            overflow-x: hidden;
-        }
-
-        /* --- Animaciones Divertidas y Dinámicas --- */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-        }
-        
-        @keyframes button-press {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.96); }
-            100% { transform: scale(1); }
-        }
-
-        /* --- Header --- */
-        .header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header h1 {
-            font-size: clamp(2.2rem, 5vw, 3.5rem);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .header p {
-            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* --- Navegación de Equipos --- */
-        .team-toggle {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin: -2rem auto 2rem;
-            padding: 0 1rem;
-            max-width: 900px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .team-btn {
-            flex-grow: 1;
-            padding: 1rem 1.5rem;
-            border: none;
-            background-color: var(--card-bg);
-            color: var(--secondary-color);
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 50px;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: var(--shadow-md);
-            text-align: center;
-        }
-
-        .team-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            color: var(--primary-color);
-        }
-        
-        .team-btn:active {
-            animation: button-press 0.2s ease-out;
-        }
-
-        .team-btn.active {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 12px 20px -6px rgba(102, 126, 234, 0.4);
-        }
-
-        /* --- Contenedor Principal --- */
-        .content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .team-content {
-            display: none;
-        }
-        
-        .team-content.active {
-            display: block;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        /* --- Estilos de Tarjetas --- */
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius-lg);
-            padding: clamp(1.5rem, 4vw, 2.5rem);
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-md);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .card h2 {
-            font-size: clamp(1.5rem, 4vw, 2.2rem);
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        .card h3 {
-            font-size: clamp(1.2rem, 3vw, 1.5rem);
-            color: var(--secondary-color);
-            margin: 2rem 0 1rem;
-            border-bottom: 2px solid rgba(124, 75, 162, 0.1);
-            padding-bottom: 0.5rem;
-        }
-        
-        /* --- Pestañas (Tabs) --- */
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            border-bottom: 2px solid #e5e7eb;
-            margin-bottom: 1.5rem;
-        }
-
-        .tab {
-            padding: 0.8rem 1.5rem;
-            background: none;
-            border: none;
-            color: #6b7280;
-            font-weight: 600;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s ease;
-            border-radius: 8px 8px 0 0;
-            font-size: 1rem;
-        }
-
-        .tab:hover {
-            color: var(--primary-color);
-            background-color: rgba(102, 126, 234, 0.05);
-        }
-        
-        .tab:active {
-            animation: button-press 0.2s ease-out;
-        }
-
-        .tab.active {
-            color: var(--primary-color);
-        }
-
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            border-radius: 3px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .tab-content {
-            display: none;
-            padding-top: 1rem;
-        }
-        
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        /* --- Cuadrantes --- */
-        .quadrant-guide {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .quadrant {
-            padding: 1.5rem;
-            border-radius: var(--border-radius-md);
-            background: #fafbff;
-            border: 1px solid #eef2f9;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .quadrant:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: var(--shadow-md);
-            border-color: var(--primary-color);
-        }
-        
-        .quadrant:active {
-            animation: button-press 0.2s ease-out;
-        }
-
-        .quadrant h4 {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .quadrant.top-right { border-top: 5px solid #34d399; }
-        .quadrant.top-left { border-top: 5px solid #fbbf24; }
-        .quadrant.bottom-right { border-top: 5px solid #fb923c; }
-        .quadrant.bottom-left { border-top: 5px solid #f87171; }
-        
-        .quadrant.top-right h4 { color: #059669; }
-        .quadrant.top-left h4 { color: #d97706; }
-        .quadrant.bottom-right h4 { color: #ea580c; }
-        .quadrant.bottom-left h4 { color: #dc2626; }
-        
-        .action-item, .tip {
-            padding: 1rem 1.5rem;
-            margin-top: 1rem;
-            border-radius: 8px;
-            border-left-width: 4px;
-            border-left-style: solid;
-        }
-        
-        .action-item {
-            background-color: #fffbeb;
-            border-left-color: #f59e0b;
-        }
-        
-        .tip {
-            background-color: #eff6ff;
-            border-left-color: #3b82f6;
-        }
-
-        /* --- Otros Componentes --- */
-        .metric-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .metric-card {
-            background: linear-gradient(135deg, #f9fafb, #f3f4f6);
-            border-radius: var(--border-radius-md);
-            padding: 1.5rem;
-            border-left: 4px solid var(--primary-color);
-            transition: all 0.3s ease;
-        }
-        
-        .metric-card:hover {
-            transform: scale(1.03);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .metric-card h4 {
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-        
-        ul {
-            list-style: none;
-            padding-left: 1.2rem;
-            margin-top: 0.5rem;
-        }
-
-        li {
-            margin-bottom: 0.75rem;
-            position: relative;
-        }
-        
-        li::before {
-            content: '✓';
-            position: absolute;
-            left: -1.5rem;
-            color: var(--primary-color);
-            font-weight: bold;
-            transition: transform 0.3s ease;
-        }
-        
-        li:hover::before {
-            transform: scale(1.3);
-        }
-
-        .workflow-steps {
-            position: relative;
-            padding-left: 1rem;
-            margin-top: 1.5rem;
-            border-left: 2px solid #e5e7eb;
-        }
-
-        .workflow-step {
-            position: relative;
-            padding-left: 2.5rem;
-            padding-bottom: 2rem;
-        }
-        
-        .workflow-step::before {
-            content: '';
-            position: absolute;
-            left: -9px;
-            top: 5px;
-            width: 16px;
-            height: 16px;
-            background: var(--bg-color);
-            border: 4px solid var(--primary-color);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .workflow-step:hover::before {
-            background-color: var(--primary-color);
-            transform: scale(1.2);
-        }
-        
-        .workflow-step:last-child {
-            padding-bottom: 0;
-        }
-
-        .workflow-step strong {
-            font-size: 1.1rem;
-            color: var(--secondary-color);
-        }
-
-        /* --- Diseño Responsivo --- */
-        @media (max-width: 768px) {
-            .content { padding: 1rem; }
-            .team-toggle { margin-top: -1.5rem; }
-            .team-btn { flex-basis: 100%; }
-        }
-
-        @media (max-width: 480px) {
-            .header { padding: 3rem 1rem; }
-            .team-toggle {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <header class="header" data-aos="fade-in" data-aos-duration="1000">
-        <h1>Lumina Score Playbook</h1>
-        <p>Tu guía definitiva para un rendimiento creativo basado en datos, uniendo intuición y métricas para un crecimiento imparable.</p>
-    </header>
-    
-    <nav class="team-toggle" data-aos="fade-up" data-aos-delay="200">
-        <button class="team-btn active" onclick="showTeam('creative')">🎨 Para el Equipo Creativo</button>
-        <button class="team-btn" onclick="showTeam('growth')">📈 Para el Equipo de Growth</button>
-        <button class="team-btn" onclick="showTeam('collab')">🤝 Colaboración Cruzada</button>
-    </nav>
-    
-    <main class="content">
-        <!-- Contenido Original pegado aquí -->
-        <div id="creative-content" class="team-content active">
-             <!-- Este contenido no estaba en el original, lo añado para que esta sección tenga algo -->
-            <div class="card" data-aos="fade-up">
-                <h2>🎯 ¿Qué es Lumina Score para Creativos?</h2>
-                <p style="font-size: 1.1rem; color: #4b5563; margin-bottom: 1rem;">
-                    Lumina Score es tu mejor brújula. Te dice qué ideas realmente conectan con los usuarios, midiendo tanto la <strong>atracción (IPM)</strong> como el <strong>valor (ROAS)</strong>. Es la forma de saber si tu creatividad no solo gusta, sino que también funciona.
-                </p>
-                <div class="tip">
-                    <strong>Conclusión clave:</strong> Un Lumina Score alto significa que tu visión creativa y los objetivos de negocio van de la mano. ¡Es la prueba de que tu idea es un éxito!
-                </div>
-            </div>
-        </div>
-
-        <div id="growth-content" class="team-content">
-            <div class="card" data-aos="fade-up">
+<div class="card" data-aos="fade-up">
                 <h2>🎯 Bubble Chart Strategic Framework</h2>
                 
                 <div class="quadrant-guide">
@@ -507,6 +68,7 @@
                 <h2>📈 Advanced Scaling Insights</h2>
                 
                 <h3>IPM-CPI Relationship:</h3>
+                <p>Strong negative correlation explained by network dynamics:</p>
                 <ul>
                     <li>High IPM → Network finds users easily → Lower competition → Lower CPI</li>
                     <li>IPM is creative-intrinsic; CPI is market-dependent</li>
@@ -535,6 +97,7 @@
             </div>
         </div>
         
+        <!-- Cross-Team Collaboration Content -->
         <div id="collab-content" class="team-content">
             <div class="card" data-aos="fade-up">
                 <h2>🤝 Building Trust Through Data</h2>
@@ -634,8 +197,8 @@
                     <h3>🚀 Scaling Creatives Together</h3>
                     
                     <h4>The Scaling Success Formula:</h4>
-                    <div style="background: #f0f4ff; padding: 1.5rem; border-radius: 8px; margin: 1rem 0; text-align: center; border: 1px solid #dbeafe;">
-                        <p style="font-size: 1.2rem; font-weight: 600; color: #667eea;">
+                    <div style="background: #f0f4ff; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                        <p style="text-align: center; font-size: 1.2rem; font-weight: 600; color: #667eea;">
                             Creative Hook Power + Audience Fit + Right Placement + Optimal Timing = Scale
                         </p>
                     </div>
@@ -645,30 +208,30 @@
                         <div class="metric-card">
                             <h4>Before Scaling</h4>
                             <ul>
-                                <li>Minimum 100 installs in auto-test</li>
-                                <li>Lumina Score above benchmark</li>
-                                <li>Creative team confirms no brand conflicts</li>
-                                <li>Growth team confirms budget availability</li>
+                                <li>✓ Minimum 100 installs in auto-test</li>
+                                <li>✓ Lumina Score above benchmark</li>
+                                <li>✓ Creative team confirms no brand conflicts</li>
+                                <li>✓ Growth team confirms budget availability</li>
                             </ul>
                         </div>
                         
                         <div class="metric-card">
                             <h4>During Scaling</h4>
                             <ul>
-                                <li>Daily performance monitoring</li>
-                                <li>Creative team ready for quick iterations</li>
-                                <li>Growth team tests 2-3 placement types</li>
-                                <li>Shared Slack channel for real-time updates</li>
+                                <li>✓ Daily performance monitoring</li>
+                                <li>✓ Creative team ready for quick iterations</li>
+                                <li>✓ Growth team tests 2-3 placement types</li>
+                                <li>✓ Shared Slack channel for real-time updates</li>
                             </ul>
                         </div>
                         
                         <div class="metric-card">
                             <h4>Post-Scaling Review</h4>
                             <ul>
-                                <li>Document what worked/didn't work</li>
-                                <li>Creative team updates best practices</li>
-                                <li>Growth team shares placement learnings</li>
-                                <li>Plan next iteration together</li>
+                                <li>✓ Document what worked/didn't work</li>
+                                <li>✓ Creative team updates best practices</li>
+                                <li>✓ Growth team shares placement learnings</li>
+                                <li>✓ Plan next iteration together</li>
                             </ul>
                         </div>
                     </div>
@@ -683,10 +246,10 @@
                     
                     <h4>The Success Multiplier Framework:</h4>
                     
-                    <div style="background: #fefce8; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border: 1px solid #fef9c3;">
-                        <h4 style="color: #854d0e;">🎲 Probability Boosters</h4>
+                    <div style="background: #fef3c7; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <h4 style="color: #92400e;">🎲 Probability Boosters</h4>
                         <p>Each action increases success probability by ~20%:</p>
-                        <ol style="padding-left: 1.5rem; list-style-type: decimal;">
+                        <ol>
                             <li><strong>Pre-launch Creative Review:</strong> Growth provides placement context before creative production</li>
                             <li><strong>Hook Testing:</strong> Test 3 different hooks for winning concepts</li>
                             <li><strong>Audience Matching:</strong> Creative briefs include target audience data</li>
@@ -800,96 +363,944 @@
                 </div>
             </div>
         </div>
-    </main>
+    </div>
     
-    <!-- Librería AOS -->
+    <!-- AOS Library -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
-    <!-- Efecto de Sonido (opcional, necesita el archivo click.mp3) -->
+    <!-- Sound Effect -->
     <audio id="clickSound" preload="auto">
-        <source src="https://www.soundjay.com/buttons/sounds/button-3.mp3" type="audio/mpeg"> <!-- URL de ejemplo -->
+        <source src="click.mp3" type="audio/mpeg">
     </audio>
     
     <script>
-        // Inicializar AOS (Animate On Scroll)
+        // Initialize AOS
         AOS.init({
-            duration: 800,       // Duración de la animación
-            easing: 'ease-out-cubic', // Curva de aceleración
-            once: true,          // Animar solo una vez
-            offset: 50           // Desplazamiento para iniciar la animación
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 50
         });
-
-        // Función para reproducir sonido de clic
+        
+        // Sound effect function
         function playClickSound() {
             const sound = document.getElementById('clickSound');
             if (sound) {
                 sound.currentTime = 0;
-                sound.play().catch(e => console.error('La reproducción del sonido falló:', e));
+                sound.play().catch(e => console.log('Sound play failed:', e));
             }
         }
-
-        // Asignar el sonido a elementos clickeables importantes
+        
+        // Add click sound to interactive elements
         document.addEventListener('DOMContentLoaded', function() {
-            const clickableElements = document.querySelectorAll('.team-btn, .tab, .quadrant');
+            const clickableElements = document.querySelectorAll('.team-btn, .tab, .workflow-step, .quadrant');
             clickableElements.forEach(element => {
                 element.addEventListener('click', playClickSound);
             });
         });
-
-        // Función para mostrar el contenido del equipo seleccionado
+        
         function showTeam(team) {
-            const teamButtons = document.querySelectorAll('.team-btn');
-            const teamContents = document.querySelectorAll('.team-content');
-
-            // Actualizar estado de los botones
-            teamButtons.forEach(btn => btn.classList.remove('active'));
-            const clickedButton = event.currentTarget; // Usar currentTarget para seguridad
-             if (clickedButton) {
-                clickedButton.classList.add('active');
-             }
-
-
-            // Ocultar todo el contenido y mostrar el seleccionado
-            teamContents.forEach(content => content.style.display = 'none'); // Ocultar rápido
-            const activeContent = document.getElementById(team + '-content');
-            if (activeContent) {
-                activeContent.classList.add('active'); // La clase 'active' controla la animación de entrada
-                activeContent.style.display = 'block';
+            // Play sound
+            playClickSound();
+            
+            // Update button states
+            document.querySelectorAll('.team-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update content visibility
+            document.querySelectorAll('.team-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(team + '-content').classList.add('active');
+            
+            // Reset tabs to first when switching teams
+            if (team === 'creative') {
+                showTab('creative', 'autotest');
+            } else if (team === 'growth') {
+                showTab('growth', 'autotest-ua');
+            } else if (team === 'collab') {
+                showTab('collab', 'weekly');
             }
-
-            // Refrescar AOS para que las animaciones se apliquen al nuevo contenido visible
+            
+            // Refresh AOS animations for new content
             AOS.refresh();
         }
-
-        // Función para mostrar la pestaña seleccionada dentro de un contenedor de equipo
+        
         function showTab(team, tabName) {
-             const clickedTab = event.currentTarget;
-            if (!clickedTab) return;
-
-            const tabContainer = clickedTab.closest('.card');
-            if (!tabContainer) return;
-
-            // Actualizar estado de las pestañas
-            tabContainer.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            clickedTab.classList.add('active');
-
-            // Actualizar visibilidad del contenido de las pestañas
+            // Play sound
+            playClickSound();
+            
+            // Update tab states for the specific team
+            const tabContainer = document.getElementById(team + '-content');
+            tabContainer.querySelectorAll('.tab').forEach((tab, index) => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update tab content visibility
             tabContainer.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
-                content.style.display = 'none';
             });
-            const activeTabContent = document.getElementById(team + '-' + tabName);
-             if (activeTabContent) {
-                activeTabContent.classList.add('active');
-                activeTabContent.style.display = 'block';
-             }
+            document.getElementById(team + '-' + tabName).classList.add('active');
         }
         
-        // Ejecución inicial para mostrar el contenido correcto al cargar la página
-        document.addEventListener('DOMContentLoaded', () => {
-             showTeam('creative');
+        // Add hover effects with dynamic shadows
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card, .metric-card, .quadrant');
+            
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const deltaX = (x - centerX) / centerX;
+                    const deltaY = (y - centerY) / centerY;
+                    
+                    card.style.transform = `perspective(1000px) rotateY(${deltaX * 2}deg) rotateX(${-deltaY * 2}deg) translateZ(10px)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = '';
+                });
+            });
         });
-
+        
+        // Progressive enhancement: Add more AOS animations dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.metric-card, .workflow-step, .quadrant');
+            elements.forEach((el, index) => {
+                if (!el.hasAttribute('data-aos')) {
+                    el.setAttribute('data-aos', 'fade-up');
+                    el.setAttribute('data-aos-delay', (index * 50).toString());
+                }
+            });
+            AOS.refresh();
+        });
     </script>
 </body>
-</html>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Score Playbook</title>
+    
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+            overflow-x: hidden;
+        }
+        
+        /* Juicy Animations */
+        @keyframes pressRelease {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .team-toggle {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+        
+        .team-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem 2rem;
+            border: none;
+            background: white;
+            color: #667eea;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .team-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .team-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .team-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .team-btn:active {
+            animation: pressRelease 0.3s ease;
+        }
+        
+        .team-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .team-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .team-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            transition: left 0.5s;
+        }
+        
+        .card:hover::before {
+            left: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card h3 {
+            color: #764ba2;
+            margin: 1.5rem 0 0.8rem;
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #f8f9fc 0%, #e8ecf4 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .metric-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .metric-card h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .quadrant-guide {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+            background: #f8f9fc;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .quadrant {
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quadrant::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.5) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .quadrant:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .quadrant:hover::after {
+            opacity: 1;
+        }
+        
+        .quadrant:active {
+            animation: pressRelease 0.3s ease;
+        }
+        
+        .quadrant h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .quadrant.top-right { 
+            border-top: 4px solid #4ade80;
+            grid-column: 2;
+            grid-row: 1;
+        }
+        
+        .quadrant.top-left { 
+            border-top: 4px solid #fbbf24;
+            grid-column: 1;
+            grid-row: 1;
+        }
+        
+        .quadrant.bottom-right { 
+            border-top: 4px solid #fb923c;
+            grid-column: 2;
+            grid-row: 2;
+        }
+        
+        .quadrant.bottom-left { 
+            border-top: 4px solid #ef4444;
+            grid-column: 1;
+            grid-row: 2;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border-left: 4px solid #667eea;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            font-size: 2rem;
+            opacity: 0.1;
+        }
+        
+        .action-item {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        
+        .workflow-steps {
+            counter-reset: step;
+            margin: 1.5rem 0;
+        }
+        
+        .workflow-step {
+            position: relative;
+            padding-left: 3.5rem;
+            margin-bottom: 2rem;
+            counter-increment: step;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .workflow-step:hover {
+            transform: translateX(10px);
+        }
+        
+        .workflow-step:active {
+            animation: pressRelease 0.3s ease;
+        }
+        
+        .workflow-step::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .workflow-step:hover::before {
+            transform: scale(1.2) rotate(360deg);
+        }
+        
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0;
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            background: none;
+            border: none;
+            color: #6b7280;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .tab:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .tab:active {
+            animation: pressRelease 0.3s ease;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            animation: slideIn 0.3s ease;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 0.5rem;
+        }
+        
+        li::before {
+            content: '▸';
+            position: absolute;
+            left: -1rem;
+            color: #667eea;
+            transition: transform 0.3s ease;
+        }
+        
+        li:hover::before {
+            transform: translateX(5px);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(251, 191, 36, 0.2);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content {
+                padding: 1rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quadrant-guide {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .tabs {
+                gap: 0.5rem;
+            }
+            
+            .tab {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .team-btn {
+                min-width: 150px;
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+            
+            .workflow-step {
+                padding-left: 3rem;
+            }
+            
+            .workflow-step::before {
+                width: 2rem;
+                height: 2rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card h2 {
+                font-size: 1.4rem;
+            }
+            
+            .team-toggle {
+                flex-direction: column;
+            }
+            
+            .team-btn {
+                width: 100%;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            .team-toggle {
+                display: none;
+            }
+            
+            .card {
+                page-break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #e5e7eb;
+            }
+            
+            .team-content {
+                display: block !important;
+            }
+        }
+        
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+        
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a1a1a;
+                color: #e5e5e5;
+            }
+            
+            .card {
+                background: #2a2a2a;
+                box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            }
+            
+            .metric-card {
+                background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
+            }
+            
+            .quadrant {
+                background: #333;
+            }
+            
+            .team-btn {
+                background: #2a2a2a;
+                color: #a5b4fc;
+            }
+            
+            .team-btn.active {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header" data-aos="fade-down">
+        <h1>Lumina Score Playbook</h1>
+        <p>Your guide to data-driven creative performance</p>
+    </div>
+    
+    <div class="team-toggle" data-aos="fade-up" data-aos-delay="200">
+        <button class="team-btn active" onclick="showTeam('creative')">
+            🎨 Creative Team
+        </button>
+        <button class="team-btn" onclick="showTeam('growth')">
+            📈 Growth Team
+        </button>
+        <button class="team-btn" onclick="showTeam('collab')">
+            🤝 Cross-Team Collaboration
+        </button>
+    </div>
+    
+    <div class="content">
+        <!-- Creative Team Content -->
+        <div id="creative-content" class="team-content active">
+            <div class="card" data-aos="fade-up">
+                <h2>🎯 What is Lumina Score?</h2>
+                <p style="font-size: 1.1rem; color: #4b5563; margin-bottom: 1rem;">
+                    Lumina Score gives you the best creative performance benchmark. It tells you which of your ideas are really connecting with users by measuring both <strong>effectiveness</strong> (how engaging the ad is to this audience) and <strong>value</strong> (how much money we get back).
+                </p>
+                <div class="tip">
+                    <strong>💡 Key Insight:</strong> A high Lumina Score means your creative is attracting the right users at the right cost - it's the sweet spot between broad appeal and business value.
+                </div>
+            </div>
+            
+            <div class="card" data-aos="fade-up">
+                <h2>🎨 Understanding Your Creative's Journey</h2>
+                <p>Your creatives go through three stages, each with its own environment:</p>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('creative', 'autotest')">1. Auto-Test</button>
+                    <button class="tab" onclick="showTab('creative', 'scaling')">2. Scaling</button>
+                    <button class="tab" onclick="showTab('creative', 'all')">3. All Environments</button>
+                </div>
+                
+                <div id="creative-autotest" class="tab-content active">
+                    <h3>🧪 Auto-Test Environment</h3>
+                    <p>We're testing with CPI campaigns to evaluate low-cost marketability - finding out if your creative can attract users efficiently.</p>
+                    <ul>
+                        <li><strong>Test cycle:</strong> Tests run Thursday → Monday. Check results Tuesday afternoon</li>
+                        <li><strong>Minimum installs filter:</strong> 20 installs for hyper/hybrid games, 50-100 for casual/franchise</li>
+                        <li><strong>Statistical reliability:</strong> Creatives with less than 2,000 impressions are penalized in scoring</li>
+                    </ul>
+                    
+                    <div class="tip">
+                        <strong>🎯 Pattern Recognition:</strong> 
+                        <br>• Top 10 Lumina + High ROAS + Mid IPM = Social placements (Reels, Stories) - quality users from premium inventory
+                        <br>• Top 10 Lumina + Mid ROAS + High IPM = FAN placements - high volume, variable quality
+                    </div>
+                </div>
+                
+                <div id="creative-scaling" class="tab-content">
+                    <h3>🚀 Scaling Environment</h3>
+                    <p>Your creative graduated! Now it's optimizing for user value, not just installs.</p>
+                    <ul>
+                        <li>Focus shifts to ROAS (Return on Ad Spend)</li>
+                        <li>You can now see platform-specific performance</li>
+                        <li>This is where you identify what resonates with different user segments</li>
+                    </ul>
+                </div>
+                
+                <div id="creative-all" class="tab-content">
+                    <h3>🌟 All Environments</h3>
+                    <p>The full picture - see how your creative performs across all networks, campaigns and placements.</p>
+                    <ul>
+                        <li>This data appears in the bubble chart</li>
+                        <li>Shows true scaling potential</li>
+                        <li>Reveals which creatives are your real top performers and why</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card" data-aos="fade-up">
+                <h2>🗺️ The Bubble Chart: Your Creative Map</h2>
+                <p>Each bubble represents a creative concept. Position tells you everything:</p>
+                
+                <div class="quadrant-guide">
+                    <div class="quadrant top-right">
+                        <h4>✅ Top Right: The Stars</h4>
+                        <p><strong>High IPM + High ROAS</strong></p>
+                        <p>These are your winners! They attract users easily AND those users spend money.</p>
+                        <div class="action-item">
+                            <strong>Your Action:</strong> Study what makes these work. What hooks, visuals, or messages resonate? Create variations!
+                        </div>
+                    </div>
+                    
+                    <div class="quadrant top-left">
+                        <h4>💎 Top Left: Hidden Gems</h4>
+                        <p><strong>Low IPM + High ROAS</strong></p>
+                        <p>Quality over quantity - attracts fewer users but they're valuable.</p>
+                        <div class="action-item">
+                            <strong>Your Action:</strong> Keep the core message but improve the hook. Test new first 3 seconds!
+                        </div>
+                    </div>
+                    
+                    <div class="quadrant bottom-left">
+                        <h4>❌ Bottom Left: Rethink Zone</h4>
+                        <p><strong>Low IPM + Low ROAS</strong></p>
+                        <p>Not connecting with audience.</p>
+                        <div class="action-item">
+                            <strong>Your Action:</strong> Analyze patterns. If multiple creatives land here, avoid that angle.
+                        </div>
+                    </div>
+                    
+                    <div class="quadrant bottom-right">
+                        <h4>🔧 Bottom Right: Hook Masters</h4>
+                        <p><strong>High IPM + Low ROAS</strong></p>
+                        <p>Great at grabbing attention but attracting wrong audience.</p>
+                        <div class="action-item">
+                            <strong>Your Action:</strong> Mix elements from top-performing creatives. Keep the hook, refine the message.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-aos="fade-up">
+                <h2>🎯 Quick Creative Strategies</h2>
+                
+                <h3>When to iterate vs. when to pivot:</h3>
+                <ul>
+                    <li><strong>Scale & Iterate</strong> when both metrics are above average - these idea angles are resonating well, we need as many of these as possible!</li>
+                    <li><strong>Iterate on hooks</strong> when: High ROAS but low IPM (improve first 3 seconds)</li>
+                    <li><strong>Mix & Match</strong> when: High IPM but low ROAS (your hook is good, gameplay or meta-gameplay changes can help)</li>
+                    <li><strong>Pivot</strong> when: Both metrics consistently underperform</li>
+                </ul>
+                
+                <div class="tip">
+                    <strong>Remember:</strong> IPM tells you about creative effectiveness - how well your ad converts viewers into installers. CPI tells you about market cost - how much you pay per install. Focus on IPM for creative insights, as it's inherent to your creative quality!
+                </div>
+            </div>
+        </div>
+        
+        <!-- Growth Team Content -->
+        <div id="growth-content" class="team-content">
+            <div class="card" data-aos="fade-up">
+                <h2>📊 Lumina Score Overview</h2>
+                <p style="font-size: 1.1rem; color: #4b5563; margin-bottom: 1rem;">
+                    Lumina Score is a composite metric that identifies creative performance by balancing user quality (ROAS, retention) with acquisition efficiency (IPM, CPI) at scale. It's statistically normalized across testing environments to ensure fair comparison.
+                </p>
+                
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <h4>IPM (Install Per Mille)</h4>
+                        <p>Conversion efficiency metric. Higher IPM = easier user acquisition, typically correlating with lower CPI.</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4>ROAS D0 & Retention D1</h4>
+                        <p><strong>ROAS D0:</strong> Immediate monetization indicator and user quality proxy</p>
+                        <p><strong>Retention D1:</strong> Engagement indicator and user quality proxy</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Score Aggregation</h4>
+                        <p>Concept-level aggregation removes placement/network noise for true creative performance.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-aos="fade-up">
+                <h2>🔄 Testing Workflow & Environment Analysis</h2>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('growth', 'autotest-ua')">Auto-Test</button>
+                    <button class="tab" onclick="showTab('growth', 'scaling-ua')">Scaling</button>
+                    <button class="tab" onclick="showTab('growth', 'all-ua')">All Environments</button>
+                </div>
+                
+                <div id="growth-autotest-ua" class="tab-content active">
+                    <h3>Auto-Test Environment (CPI Campaigns)</h3>
+                    <div class="workflow-steps">
+                        <div class="workflow-step">
+                            <strong>Launch Window:</strong> Thursdays (test start) → Mondays (test end)
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Data Maturity:</strong> Tuesday 12:00 PM for reliable metrics
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Confidence Thresholds:</strong>
+                            <ul>
+                                <li>Hyper/Hybrid games: 20+ installs</li>
+                                <li>Casual/Franchise: 50-100 installs</li>
+                                <li>Creatives with <2,000 impressions are penalized (not filtered) to maintain reliability</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4>Placement Pattern Recognition:</h4>
+                    <ul>
+                        <li><span class="highlight">Top 10 Lumina + High ROAS + Mid IPM</span> = Social placements (Reels, Stories) - Premium inventory</li>
+                        <li><span class="highlight">Top 10 Lumina + Mid ROAS + High IPM</span> = FAN placements - Volume-driven, variable quality</li>
+                    </ul>
+                </div>
+                
+                <div id="growth-scaling-ua" class="tab-content">
+                    <h3>Scaling Environment (Value-Optimized Campaigns)</h3>
+                    <p>Transition from volume to value optimization. Key considerations:</p>
+                    <ul>
+                        <li><strong>Campaign Types:</strong> All value-optimized campaigns and other advanced models</li>
+                        <li><strong>Platform Segmentation:</strong> SDK vs Social performance divergence</li>
+                        <li><strong>User Cohort Analysis:</strong> Quality segmentation becomes more relevant</li>
+                    </ul>
+                    
+                    <div class="tip">
+                        <strong>Strategic Approach:</strong> Go from broad to narrow - identify patterns in ads performance and evaluate how to maximize their scale.
+                    </div>
+                </div>
+                
+                <div id="growth-all-ua" class="tab-content">
+                    <h3>All Environments (Holistic View)</h3>
+                    <p>Aggregate performance across all campaign types and placements.</p>
+                    <ul>
+                        <li>Bubble size = spend/scale indicator</li>
+                        <li>Position = efficiency/quality balance</li>
+                        <li>Use for game-level strategic decisions</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card" data-aos="fade-up">
+                <h2>🎯 Bubble Chart Strategic Framework</h2>
