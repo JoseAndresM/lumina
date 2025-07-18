@@ -215,7 +215,7 @@
         /* --- Quadrant Redesign (High Priority) --- */
         .quadrant-guide {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: 1fr 1fr; /* Two equal columns */
             gap: 1.5rem;
             margin-top: 2rem;
         }
@@ -228,104 +228,60 @@
             display: flex;
             flex-direction: column;
         }
-
-        .quadrant h4 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .quadrant.top-right { border-top: 5px solid var(--success-color); }
-        .quadrant.top-right h4 { color: var(--success-color); }
-
-        .quadrant.top-left { border-top: 5px solid var(--warning-color); }
-        .quadrant.top-left h4 { color: var(--warning-color); }
         
-        .quadrant.bottom-right { border-top: 5px solid var(--info-color); }
+        /* Explicitly place quadrants in the correct visual order */
+        .quadrant.top-left     { grid-column: 1; grid-row: 1; border-top: 5px solid var(--warning-color); }
+        .quadrant.top-right    { grid-column: 2; grid-row: 1; border-top: 5px solid var(--success-color); }
+        .quadrant.bottom-left  { grid-column: 1; grid-row: 2; border-top: 5px solid var(--danger-color); }
+        .quadrant.bottom-right { grid-column: 2; grid-row: 2; border-top: 5px solid var(--info-color); }
+
+        .quadrant h4 { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.75rem; }
+        .quadrant.top-right h4    { color: var(--success-color); }
+        .quadrant.top-left h4     { color: var(--warning-color); }
         .quadrant.bottom-right h4 { color: var(--info-color); }
-        
-        .quadrant.bottom-left { border-top: 5px solid var(--danger-color); }
-        .quadrant.bottom-left h4 { color: var(--danger-color); }
+        .quadrant.bottom-left h4  { color: var(--danger-color); }
 
         .action-item {
             margin-top: auto; /* Pushes to bottom */
             padding-top: 1rem;
         }
         
-        .action-item ul {
-            margin-top: 0.5rem;
-        }
+        .action-item ul { margin-top: 0.5rem; }
         
         /* --- Other Component Styles --- */
-        .metric-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .metric-card, .tip {
-            padding: 1.5rem;
-            border-radius: 12px;
-            border-left: 4px solid var(--info-color);
-            background-color: #eff6ff;
-        }
-
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            border-bottom: 2px solid var(--border-color);
-            margin-bottom: 1.5rem;
-        }
-
-        .tab {
-            padding: 0.75rem 1.25rem;
-            background: none;
-            border: none;
-            color: var(--text-light);
-            font-weight: 600;
-            cursor: pointer;
-            position: relative;
-            border-radius: 8px 8px 0 0;
-            transition: all 0.2s ease;
-        }
-
-        .tab:hover {
-            color: var(--primary-color);
-            background-color: #eef2ff;
-        }
-
-        .tab.active {
-            color: var(--primary-color);
-        }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .metric-card, .tip { padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--info-color); background-color: #eff6ff; margin-top: 1rem; }
         
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--primary-color);
-        }
+        .mistake-solution { margin-top: 1.5rem; }
+        .mistake-solution h4 { color: var(--danger-color); }
+        .mistake-solution p { color: var(--success-color); }
+
+        .tabs { display: flex; flex-wrap: wrap; gap: 1rem; border-bottom: 2px solid var(--border-color); margin-bottom: 1.5rem; }
+        .tab { padding: 0.75rem 1.25rem; background: none; border: none; color: var(--text-light); font-weight: 600; cursor: pointer; position: relative; border-radius: 8px 8px 0 0; transition: all 0.2s ease; }
+        .tab:hover { color: var(--primary-color); background-color: #eef2ff; }
+        .tab.active { color: var(--primary-color); }
+        .tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--primary-color); }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
 
         /* --- Responsive Adjustments --- */
         @media (max-width: 768px) {
-            .sub-nav {
-                justify-content: flex-start;
-                padding: 1rem;
-            }
+            .sub-nav { justify-content: flex-start; padding: 1rem; }
             #home-btn { margin-right: 0; }
             .card { scroll-margin-top: 150px; }
+            .quadrant-guide { grid-template-columns: 1fr; } /* Stack quadrants on small screens */
+            .quadrant { grid-column: auto !important; grid-row: auto !important; }
         }
 
     </style>
 </head>
 <body>
+    
+    <!-- Sound Effect Element -->
+    <audio id="clickSound" preload="auto">
+        <source src="click.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- Lobby / Initial View -->
     <div id="lobby">
@@ -360,7 +316,6 @@
             </div>
             
             <div class="card" id="creative-journey" data-aos="fade-up">
-                <!-- Content from Original -->
                 <h2>🎨 Understanding Your Creative's Journey</h2>
                 <p>Your creatives go through three stages, each with its own environment:</p>
                 
@@ -378,6 +333,13 @@
                         <li><strong>Minimum installs filter:</strong> 20 installs for hyper/hybrid games, 50-100 for casual/franchise</li>
                         <li><strong>Statistical reliability:</strong> Creatives with less than 2,000 impressions are penalized in scoring</li>
                     </ul>
+                    <div class="tip">
+                        <h4>🎯 Pattern Recognition for placements:</h4>
+                        <ul>
+                            <li>Top 10 Lumina + High ROAS + Mid IPM = Social placements (Reels, Stories) - quality users from premium inventory.</li>
+                            <li>Top 10 Lumina + Mid ROAS + High IPM = FAN placements - high volume, variable quality</li>
+                        </ul>
+                    </div>
                 </div>
                 
                 <div id="creative-scaling" class="tab-content">
@@ -405,20 +367,20 @@
                  <h2>🗺️ The Bubble Chart: Your Creative Map</h2>
                 <p>Each bubble represents a creative concept. Its position on the map tells you everything about its performance.</p>
                 <div class="quadrant-guide">
-                    <div class="quadrant top-right">
-                        <h4>✅ Top Right: The Stars</h4>
-                        <p><strong>High IPM + High ROAS</strong></p>
-                        <p>These are your winners! They attract users easily AND those users spend money.</p>
-                        <div class="action-item">
-                            <strong>Your Action:</strong> Study what makes these work. What hooks, visuals, or messages resonate? Create variations!
-                        </div>
-                    </div>
                     <div class="quadrant top-left">
                         <h4>💎 Top Left: Hidden Gems</h4>
                         <p><strong>Low IPM + High ROAS</strong></p>
                         <p>Quality over quantity. Attracts fewer users, but they are highly valuable.</p>
                         <div class="action-item">
                             <strong>Your Action:</strong> Keep the core message but improve the hook. Test new first 3 seconds to boost IPM!
+                        </div>
+                    </div>
+                    <div class="quadrant top-right">
+                        <h4>✅ Top Right: The Stars</h4>
+                        <p><strong>High IPM + High ROAS</strong></p>
+                        <p>These are your winners! They attract users easily AND those users spend money.</p>
+                        <div class="action-item">
+                            <strong>Your Action:</strong> Study what makes these work. What hooks, visuals, or messages resonate? Create variations!
                         </div>
                     </div>
                     <div class="quadrant bottom-left">
@@ -458,7 +420,7 @@
         <!-- Growth Team Section -->
         <section id="growth-section" class="team-section">
             <nav class="sub-nav">
-                <a href="#" id="home-btn" onclick="showLobby(event)">🏠 Home</a>
+                <a href="#" onclick="showLobby(event)">🏠 Home</a>
                 <a href="#growth-overview">Overview</a>
                 <a href="#growth-workflow">Workflow</a>
                 <a href="#growth-bubble-chart">Bubble Chart</a>
@@ -513,19 +475,6 @@
             <div class="card" id="growth-bubble-chart" data-aos="fade-up">
                 <h2>🎯 Bubble Chart Strategic Framework</h2>
                 <div class="quadrant-guide">
-                    <div class="quadrant top-right">
-                        <h4>✅ Top Right Quadrant</h4>
-                        <p><strong>High IPM + High ROAS D0</strong>: Optimal performance zone. Scale aggressively.</p>
-                        <div class="action-item">
-                            <strong>UA Actions:</strong>
-                            <ul>
-                                <li>Ensure it's propagated across major networks</li>
-                                <li>Test across all placement types and countries</li>
-                                <li>Expand to tailored audiences campaigns</li>
-                                <li>Document winning patterns for creative team</li>
-                            </ul>
-                        </div>
-                    </div>
                     <div class="quadrant top-left">
                         <h4>💎 Top Left Quadrant</h4>
                         <p><strong>Low IPM + High ROAS D0</strong>: Quality-focused creatives with efficiency limitations.</p>
@@ -536,6 +485,19 @@
                                 <li>Test on high install countries</li>
                                 <li>Monitor fatigue closely</li>
                                 <li>Test on long maturation campaigns</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="quadrant top-right">
+                        <h4>✅ Top Right Quadrant</h4>
+                        <p><strong>High IPM + High ROAS D0</strong>: Optimal performance zone. Scale aggressively.</p>
+                        <div class="action-item">
+                            <strong>UA Actions:</strong>
+                            <ul>
+                                <li>Ensure it's propagated across major networks</li>
+                                <li>Test across all placement types and countries</li>
+                                <li>Expand to tailored audiences campaigns</li>
+                                <li>Document winning patterns for creative team</li>
                             </ul>
                         </div>
                     </div>
@@ -592,7 +554,7 @@
         <!-- Collaboration Section -->
         <section id="collab-section" class="team-section">
             <nav class="sub-nav">
-                <a href="#" id="home-btn" onclick="showLobby(event)">🏠 Home</a>
+                <a href="#" onclick="showLobby(event)">🏠 Home</a>
                 <a href="#collab-trust">Building Trust</a>
                 <a href="#collab-winning">Winning Together</a>
                 <a href="#collab-power-moves">Power Moves</a>
@@ -616,18 +578,67 @@
                     <button class="tab" onclick="showTab('collab', 'scaling')">Scaling Together</button>
                     <button class="tab" onclick="showTab('collab', 'maximize')">Maximizing Success</button>
                 </div>
-                <div id="collab-weekly" class="tab-content active"><!-- ... content from original ... --></div>
-                <div id="collab-scaling" class="tab-content"><!-- ... content from original ... --></div>
-                <div id="collab-maximize" class="tab-content"><!-- ... content from original ... --></div>
-            </div>
-
-            <div class="card" id="collab-power-moves" data-aos="fade-up">
-                <h2>🚀 Dashboard Power Moves</h2>
-                <h3>🔍 Reading Between the Lines</h3>
-                <div class="metric-grid">
-                    <div class="metric-card"><h4>📊 Bubble Size Secrets</h4><p><strong>Large bubble + Bottom left?</strong> Major budget drain! <strong>Small bubble + Top right?</strong> Hidden gem to scale. <strong>Growing bubble + Moving up?</strong> Optimization working.</p></div>
-                    <div class="metric-card"><h4>⚡ Velocity Indicators</h4><p><strong>Fast IPM growth:</strong> Hook is catching fire. <strong>ROAS climbing slowly:</strong> Audience quality improving. <strong>Both declining:</strong> Creative fatigue.</p></div>
-                    <div class="metric-card"><h4>🎨 Creative Health Signals</h4><p><strong>Multiple concepts in same quadrant:</strong> Clear pattern. <strong>Scattered performance:</strong> Need clearer strategy. <strong>Upward trend:</strong> Team synergy working.</p></div>
+                <div id="collab-weekly" class="tab-content active">
+                    <h3>📅 Weekly Dashboard Review Process</h3>
+                    <h4>Tuesday 2PM: Data Review (Fresh auto-test)</h4>
+                    <ul>
+                        <li><strong>Growth:</strong> Show test results from previous week and send screenshot and link.</li>
+                        <li><strong>Creative:</strong> Explain the creative strategy behind top performing concepts.</li>
+                        <li><strong>Together:</strong> Identify patterns in winning/losing creatives.</li>
+                    </ul>
+                    <h4>Analyze Quadrant Movement</h4>
+                     <ul>
+                        <li>Focus on creatives that moved between quadrants.</li>
+                        <li>What changed? (network, campaign, placement, audience, or creative fatigue?)</li>
+                        <li><strong>Creative team shares qualitative insights:</strong> why are we trying this?</li>
+                        <li><strong>Growth team shares performance context:</strong> how we can make that work?</li>
+                    </ul>
+                    <h4>Collaborative Action Planning</h4>
+                    <p>Turn insights into next week's strategy:</p>
+                    <div class="quadrant-guide">
+                        <div class="quadrant top-right">
+                            <h4>✅ Stars (Top Right)</h4>
+                            <p><strong>Creative:</strong> Share 3 key elements that make this work.</p>
+                            <p><strong>Growth:</strong> Identify best placements/audiences.</p>
+                            <p><strong>Together:</strong> Plan 2-3 variations maintaining core elements.</p>
+                        </div>
+                        <div class="quadrant bottom-right">
+                             <h4>🔧 High-Potential (Bottom Right)</h4>
+                            <p><strong>Creative:</strong> Identify message-audience mismatch.</p>
+                            <p><strong>Growth:</strong> Test with value-optimized campaigns.</p>
+                            <p><strong>Together:</strong> Merge with high-ROAS creative elements.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="collab-scaling" class="tab-content">
+                    <h3>🚀 Scaling Together</h3>
+                    <h4>The formula for success at scale:</h4>
+                    <div class="tip">
+                        <p>High Lumina score + Correct Campaign and Placement + Audience suitability + Optimal timing = Scale.</p>
+                    </div>
+                </div>
+                <div id="collab-maximize" class="tab-content">
+                    <h3>💡 Common mistakes and solutions:</h3>
+                    <div class="mistake-solution">
+                        <h4>❌ Mistake: "This creative should work"</h4>
+                        <p>✓ Solution: let data guide decisions. If it drops to the left for 2 weeks, pivot the concept regardless of initial enthusiasm.</p>
+                    </div>
+                     <div class="mistake-solution">
+                        <h4>❌ Mistake: "Put it everywhere"</h4>
+                        <p>✓ Solution: It is valid to test everywhere, but it has a higher chance of success adapt the creative style to the network and placement (For example, UGC, AI Avatar creatives need social placements).</p>
+                    </div>
+                     <div class="mistake-solution">
+                        <h4>❌ Error: "Data must be wrong"</h4>
+                        <p>✓ Solution: Lumina Dashboard aggregates fairly. If data does not match external sources, share links and screenshots in the channel. If scores are low, focus on understanding why rather than questioning the data.</p>
+                    </div>
+                     <div class="mistake-solution">
+                        <h4>❌ Mistake: "Let's focus on CPI"</h4>
+                        <p>✓ Solution: CPI encourages misleading creatives, can potentially bring in lower quality users. Those users are not healthy for the business. Focus on metrics that tell you more about the performance of your idea.</p>
+                    </div>
+                     <div class="mistake-solution">
+                        <h4>❌ Mistake: "Let's iterate on the winner"</h4>
+                        <p>✓ Solution: After the 5th iteration on the winner, creative stagnation may be happening and returns diminish.</p>
+                    </div>
                 </div>
             </div>
 
@@ -635,11 +646,25 @@
                 <h2>💬 Communication Templates</h2>
                 <div class="tip">
                     <h4>When Creative has performance doubts:</h4>
-                    <p><strong>Do this:</strong> Screenshot the dashboard, share in Slack: "Hey Growth team, I'm seeing [metric] for [concept]. Can you help me understand the placements and why performance might be [observation]?"</p>
+                    <p><strong>Instead of:</strong> Wondering silently or making assumptions</p>
+                    <p><strong>Do this:</strong> Screenshot the dashboard, share the link in Slack: "Hey Growth team, I'm seeing [specific metric] for our [concept name]. Can you help me understand what placements we're running and why performance might be [specific observation]?"</p>
+                    <p><em>💡 Tip: Always include dashboard screenshot + link for context</em></p>
                 </div>
-                 <div class="tip" style="border-left-color: var(--success-color); background-color: #f0fdf4;">
+                <div class="tip" style="border-left-color: var(--success-color); background-color: #f0fdf4;">
                     <h4>When Growth needs iterations that scale:</h4>
-                    <p><strong>Do this:</strong> "Creative team, [concept X] is strong in [placement]. Dashboard shows potential if we improve [element]. Can we test variations focusing on [request based on data]?"</p>
+                    <p><strong>Instead of:</strong> "We need to lower CPI" (this encourages misleading creatives)</p>
+                    <p><strong>Do this:</strong> "Creative team, [concept X] shows strong performance in [placement] with [specific metric]. Dashboard shows [screenshot] potential to scale if we can improve [specific element]. Can we test 2-3 variations focusing on [specific request based on data]?"</p>
+                    <p><em>💡 Tip: Justify requests with market data to align on quality users, not just cheap installs</em></p>
+                </div>
+                <div class="tip" style="border-left-color: var(--warning-color); background-color: #fffbeb;">
+                    <h4>When celebrating success:</h4>
+                    <p><strong>Always:</strong> Share dashboard screenshot showing the winning creative's journey: "This win happened because Creative nailed [specific element] and Growth found the perfect [placement/audience]. Here's what we learned for next time..."</p>
+                    <p><em>💡 Tip: Tag both teams and save insights for future reference</em></p>
+                </div>
+                <div class="tip" style="border-left-color: var(--danger-color); background-color: #fef2f2;">
+                    <h4>When addressing underperformance:</h4>
+                    <p><strong>Instead of:</strong> "This creative isn't working"</p>
+                    <p><strong>Do this:</strong> "Dashboard data [screenshot] shows [concept] in bottom left quadrant after [timeframe]. Let's analyze: Creative team - any hypothesis on messaging? Growth team - which audiences/placements did we test? Together - pivot or iterate?"</p>
                 </div>
             </div>
         </section>
@@ -657,15 +682,21 @@
                 once: true,
                 offset: 50
             });
-
-            // Populate the hidden tab content that was removed for brevity
-            const collabWeekly = `<h3>📅 Weekly Dashboard Review Process</h3><p>Turn insights into next week's strategy by analyzing quadrant movements and collaboratively planning actions.</p>`;
-            const collabScaling = `<h3>🚀 Scaling Creatives Together</h3><p>Use the joint checklist for pre-scaling, during scaling, and post-scaling to ensure alignment and success.</p>`;
-            const collabMaximize = `<h3>💡 Maximizing Success Likelihood</h3><p>Use the Probability Boosters framework and avoid common pitfalls to increase your chances of a winning creative.</p>`;
             
-            document.getElementById('collab-weekly').innerHTML = collabWeekly;
-            document.getElementById('collab-scaling').innerHTML = collabScaling;
-            document.getElementById('collab-maximize').innerHTML = collabMaximize;
+            // --- Sound Effect Logic ---
+            const clickSound = document.getElementById('clickSound');
+            const interactiveElements = document.querySelectorAll('button, a, .tab, .quadrant');
+            
+            function playClickSound() {
+                if (clickSound) {
+                    clickSound.currentTime = 0;
+                    clickSound.play().catch(e => console.error("Sound playback failed:", e));
+                }
+            }
+            
+            interactiveElements.forEach(elem => {
+                elem.addEventListener('click', playClickSound);
+            });
         });
 
         const lobby = document.getElementById('lobby');
@@ -689,22 +720,21 @@
             const activeSection = document.getElementById(`${teamId}-section`);
             if (activeSection) {
                 activeSection.classList.add('active');
-                // Refresh AOS for the new content
-                AOS.refreshHard();
+                AOS.refreshHard(); // Refresh AOS for the newly visible content
             }
         }
 
         function showTab(team, tabName) {
-            const tabGroup = document.getElementById(`${team}-section`);
+            const tabGroup = event.currentTarget.closest('.card');
             if (!tabGroup) return;
 
-            const clickedTab = event.currentTarget;
-            
+            // Update tab button states
             tabGroup.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            clickedTab.classList.add('active');
+            event.currentTarget.classList.add('active');
             
+            // Update tab content visibility
             tabGroup.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            const activeContent = document.getElementById(`${team}-${tabName}`);
+            const activeContent = tabGroup.querySelector(`#${team}-${tabName}`);
             if(activeContent) activeContent.classList.add('active');
         }
     </script>
