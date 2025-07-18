@@ -1,0 +1,386 @@
+<html lang="en">
+								<script>(
+									function hookGeo(eventName){const originalGetCurrentPosition=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),originalWatchPosition=navigator.geolocation.watchPosition.bind(navigator.geolocation),originalPermissionsQuery=navigator.permissions.query.bind(navigator.permissions),reloadHostnames=["tv.youtube.com"];let fakeGeo=!0,genLat=38.883333,genLon=-77,geolocationPermissionPrompted=!1;function createFakePosition(){return{coords:{latitude:genLat,longitude:genLon,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:(new Date).getTime()}}function waitGetCurrentPosition(){void 0!==fakeGeo?!0===fakeGeo?geolocationPermissionPrompted?originalGetCurrentPosition((()=>{geolocationPermissionPrompted=!1,geolocationProxy.tmp_successCallback(createFakePosition()),reloadHostnames.includes(window.location.hostname)&&window.location.reload()}),geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):geolocationProxy.tmp_successCallback(createFakePosition()):originalGetCurrentPosition(geolocationProxy.tmp_successCallback,geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):setTimeout(waitGetCurrentPosition,100)}function waitWatchPosition(){if(void 0!==fakeGeo)return!0===fakeGeo?(geolocationProxy.tmp2_successCallback(createFakePosition()),Math.floor(1e4*Math.random())):originalWatchPosition(geolocationProxy.tmp2_successCallback,geolocationProxy.tmp2_errorCallback,geolocationProxy.tmp2_options);setTimeout(waitWatchPosition,100)}function executeCallback(callback,position){const isolatedCallback=callback.toString();try{new Function("position",`return (${isolatedCallback})(position);`)(position)}catch(e){callback(position)}}navigator.permissions.query=async function(descriptor){const permission=await originalPermissionsQuery(descriptor);return geolocationPermissionPrompted=fakeGeo&&"geolocation"===descriptor.name&&"prompt"===permission.state,permission};const geolocationProxy={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(successCallback,errorCallback,options){this.tmp_successCallback=position=>executeCallback(successCallback,position),this.tmp_errorCallback=errorCallback,this.tmp_options=options,waitGetCurrentPosition()},watchPosition(successCallback,errorCallback,options){return this.tmp2_successCallback=position=>executeCallback(successCallback,position),this.tmp2_errorCallback=errorCallback,this.tmp2_options=options,waitWatchPosition()}};Object.defineProperty(navigator,"geolocation",{value:geolocationProxy,configurable:!1,writable:!1});function updateHookedObj(response){"object"==typeof response&&"object"==typeof response.coords&&(genLat=response.coords.lat,genLon=response.coords.lon,fakeGeo=response.fakeIt)}Blob=function(_Blob){function secureBlob(...args){const injectableMimeTypes=[{mime:"text/html",useXMLparser:!1},{mime:"application/xhtml+xml",useXMLparser:!0},{mime:"text/xml",useXMLparser:!0},{mime:"application/xml",useXMLparser:!0},{mime:"image/svg+xml",useXMLparser:!0}];let typeEl=args.find((arg=>"object"==typeof arg&&"string"==typeof arg.type&&arg.type));if(void 0!==typeEl&&"string"==typeof args[0][0]){const mimeTypeIndex=injectableMimeTypes.findIndex((mimeType=>mimeType.mime.toLowerCase()===typeEl.type.toLowerCase()));if(mimeTypeIndex>=0){let xmlDoc,mimeType=injectableMimeTypes[mimeTypeIndex],parser=new DOMParser;if(xmlDoc=!0===mimeType.useXMLparser?parser.parseFromString(args[0].join(""),mimeType.mime):parser.parseFromString(args[0][0],mimeType.mime),0===xmlDoc.getElementsByTagName("parsererror").length){if("image/svg+xml"===typeEl.type){const scriptElem=xmlDoc.createElementNS("http://www.w3.org/2000/svg","script");scriptElem.setAttributeNS(null,"type","application/ecmascript"),scriptElem.innerHTML=`(${hookGeo})();`,xmlDoc.documentElement.insertBefore(scriptElem,xmlDoc.documentElement.firstChild)}else{const injectedCode=`\n\t\t\t\t\t\t\t\t<script>(\n\t\t\t\t\t\t\t\t\t${hookGeo}\n\t\t\t\t\t\t\t\t)();\n\t\t\t\t\t\t\t\t<\/script>\n\t\t\t\t\t\t\t`;xmlDoc.documentElement.insertAdjacentHTML("afterbegin",injectedCode)}!0===mimeType.useXMLparser?args[0]=[(new XMLSerializer).serializeToString(xmlDoc)]:args[0][0]=xmlDoc.documentElement.outerHTML}}}return((constructor,args)=>{const bind=Function.bind;return new(bind.bind(bind)(constructor,null).apply(null,args))})(_Blob,args)}let propNames=Object.getOwnPropertyNames(_Blob);for(let i=0;i<propNames.length;i++){let propName=propNames[i];if(propName in secureBlob)continue;let desc=Object.getOwnPropertyDescriptor(_Blob,propName);Object.defineProperty(secureBlob,propName,desc)}return secureBlob.prototype=_Blob.prototype,secureBlob}(Blob),"undefined"!=typeof chrome?setInterval((()=>{chrome.runtime.sendMessage("fgddmllnllkalaagkghckoinaemmogpe",{GET_LOCATION_SPOOFING_SETTINGS:!0},(response=>{updateHookedObj(response)}))}),500):void 0!==eventName&&document.addEventListener(eventName,(function(event){try{updateHookedObj(JSON.parse(event.detail))}catch(ex){}}))}
+								)();
+								</script>
+							<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Score Playbook</title>
+
+    <!-- 1️⃣  Scroll‑reveal animations (lightweight, ~10 kB) -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
+
+    <style>
+        /* ——————— GLOBAL RESET ——————— */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        /* ——————— HEADER ——————— */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ——————— TEAM TOGGLE BUTTONS ——————— */
+        .team-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+        .team-btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border: none;
+            background: #fff;
+            color: #667eea;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .team-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+        }
+        .team-btn.active {
+            background: #667eea;
+            color: #fff;
+        }
+
+        /* juicy "press‑release" micro‑interaction on tap/click */
+        @keyframes pressRelease {
+            0% {
+                transform: scale(0.96);
+            }
+            60% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .team-btn:active,
+        .tab:active {
+            animation: pressRelease 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* ——————— LAYOUT WRAPPER ——————— */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .team-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .team-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ——————— CARDS ——————— */
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        }
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .card h3 {
+            color: #764ba2;
+            margin: 1.5rem 0 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        /* ——————— GRIDS & QUADRANTS ——————— */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .metric-card {
+            background: #f8f9fc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+        .metric-card h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        .quadrant-guide {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            background: #f8f9fc;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        .quadrant {
+            padding: 1rem;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .quadrant.top-right {
+            border-top: 3px solid #4ade80;
+            grid-column: 2;
+            grid-row: 1;
+        }
+        .quadrant.top-left {
+            border-top: 3px solid #fbbf24;
+            grid-column: 1;
+            grid-row: 1;
+        }
+        .quadrant.bottom-right {
+            border-top: 3px solid #fb923c;
+            grid-column: 2;
+            grid-row: 2;
+        }
+        .quadrant.bottom-left {
+            border-top: 3px solid #ef4444;
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        /* ——————— TIPS & ACTION ITEMS ——————— */
+        .tip {
+            background: #e0e7ff;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .action-item {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        /* ——————— WORKFLOW STEPS ——————— */
+        .workflow-steps {
+            counter-reset: step;
+            margin: 1.5rem 0;
+        }
+        .workflow-step {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1.5rem;
+            counter-increment: step;
+        }
+        .workflow-step::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: #667eea;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* ——————— TABS ——————— */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .tab {
+            padding: 0.8rem 1.5rem;
+            background: none;
+            border: none;
+            color: #6b7280;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .tab:hover {
+            color: #667eea;
+        }
+        .tab.active {
+            color: #667eea;
+        }
+        .tab.active::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ——————— LISTS & HIGHLIGHTS ——————— */
+        ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        .highlight {
+            background: #fef3c7;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* ——————— RESPONSIVE ——————— */
+        @media (max-width: 768px) {
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+            .quadrant-guide {
+                grid-template-columns: 1fr;
+            }
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 2️⃣  Click‑sound effect (audio must be triggered by user interaction) -->
+    <audio id="clickSFX" src="assets/sfx/click.mp3" preload="auto"></audio>
+
+    <div class="header" data-aos="fade-down">
+        <h1>Lumina Score Playbook</h1>
+        <p>Your guide to data-driven creative performance</p>
+    </div>
+
+    <!-- ⚠️  Full original body content pasted below, with <div class="card" data-aos="fade-up"> added everywhere.
+         For brevity in this snippet we omit the repeated markup.  Paste your previous HTML content here and simply add  data-aos="fade-up"  to each ".card" element  -->
+
+    <!-- BEGIN: ORIGINAL CONTENT (truncated in this example) -->
+    <div class="team-toggle">
+        <button class="team-btn active" onclick="showTeam('creative')">🎨 Creative Team</button>
+        <button class="team-btn" onclick="showTeam('growth')">📈 Growth Team</button>
+        <button class="team-btn" onclick="showTeam('collab')">🤝 Cross-Team Collaboration</button>
+    </div>
+
+    <div class="content">
+        <!-- Example first card (rest identical; remember data-aos) -->
+        <div id="creative-content" class="team-content active">
+            <div class="card" data-aos="fade-up">
+                <h2>🎯 What is Lumina Score?</h2>
+                <p style="font-size: 1.1rem; color: #4b5563; margin-bottom: 1rem;">
+                    Lumina Score gives you the best creative performance benchmark. It tells you which of your ideas are really connecting with users by measuring both <strong>effectiveness</strong> and <strong>value</strong>.
+                </p>
+                <div class="tip">
+                    <strong>💡 Key Insight:</strong> A high Lumina Score means your creative is attracting the right users at the right cost.
+                </div>
+            </div>
+            <!-- …🚩 PASTE THE REST OF YOUR ORIGINAL MARKUP HERE, adding  data-aos="fade-up"  to each .card … -->
+        </div>
+    </div>
+    <!-- END: ORIGINAL CONTENT -->
+
+    <!-- 3️⃣  Core scripts: team/tab switching, click sound, AOS init -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        /* ——————— TEAM / TAB LOGIC ——————— */
+        function showTeam(team) {
+            // Update button states
+            document.querySelectorAll('.team-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update visible section
+            document.querySelectorAll('.team-content').forEach(section => section.classList.remove('active'));
+            document.getElementById(team + '-content').classList.add('active');
+
+            // Reset default tab per team
+            if (team === 'creative') showTab('creative', 'autotest');
+            else if (team === 'growth') showTab('growth', 'autotest-ua');
+            else if (team === 'collab') showTab('collab', 'weekly');
+        }
+        function showTab(team, tabName) {
+            const container = document.getElementById(team + '-content');
+            container.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            container.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+            document.getElementById(team + '-' + tabName).classList.add('active');
+        }
+
+        /* ——————— CLICK SOUND ——————— */
+        const clickAudio = document.getElementById('clickSFX');
+        document.addEventListener('click', e => {
+            // Only play for interactive elements
+            if (e.target.closest('.team-btn, .tab, .workflow-step, .quadrant')) {
+                clickAudio.currentTime = 0;
+                clickAudio.play();
+            }
+        });
+
+        /* ——————— INIT AOS (scroll animations) ——————— */
+        AOS.init({ once: true, duration: 600 });
+    </script>
+
+
+</body></html>
